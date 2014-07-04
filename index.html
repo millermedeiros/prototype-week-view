@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+    <meta charset="utf-8">
+    <title>week view</title>
+    <link href="/style/main.css" rel="stylesheet" />
+
+    <script data-main="js/app.js" src="js/alameda.js"></script>
+  </head>
+
+  <body>
+    <header id="time-header">
+      <h1>{{weekHeader}}</h1>
+      <button type="button" v-on="touchstart: showToday, mousedown: showToday">today</button>
+    </header>
+
+    <section id="week-view">
+      <div class="week-sidebar-allday icon-allday">{{allday}}</div>
+
+      <div class="week-alldays-wrapper">
+        <div class="week-alldays" style="width:{{days.length * wid}}rem; transform: translateX({{scrollOffsetX}}px)">
+          <section class="week-allday" v-repeat="days">
+            <h1 class="week-allday-date">{{date | weekDayName}}</h1>
+            <ol class="week-allday-events">
+              <li class="week-allday-event" v-repeat="alldayEvents" data-id="{{id}}">{{title}}</li>
+            </ol>
+          </section>
+        </div>
+      </div>
+
+      <section class="week-main">
+        <div class="week-days-wrapper">
+          <ol class="week-sidebar-hours">
+            <li v-repeat="hours" data-hour="{{$index}}">{{$value}}</li>
+          </ol>
+          <section class="week-days" style="width:{{days.length * wid}}rem; transform: translateX({{scrollOffsetX}}px)">
+            <section class="week-day" v-repeat="days" data-date="{{date}}">
+              <section class="week-day-hours">
+                <ol class="week-hour" v-repeat="hours" data-hour="{{$index}}">
+                  <li class="week-event" v-repeat="events" data-id="{{id}}" style="height: {{duration * 3}}rem">{{title}}</li>
+                </ol>
+              </section>
+            </section>
+          </section>
+        </div>
+
+      </section>
+    </section>
+
+  </body>
+</html>

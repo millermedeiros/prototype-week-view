@@ -1,0 +1,19 @@
+{
+  "volo": {
+    "dependencies": {
+      "alameda": "github:requirejs/alameda/0.2.0",
+      "vue": "github:yyx990803/vue/v0.10.5#dist/vue.js",
+      "mout": "github:mout/mout/v0.9.1#src",
+      "seedrandom": "github:davidbau/seedrandom/2.3.6#seedrandom.js"
+    }
+  },
+  "jshintConfig": {
+    "eqnull": true,
+    "undef": true,
+    "unused": true,
+    "browser": true,
+    "predef": [
+      "define"
+    ]
+  }
+}
