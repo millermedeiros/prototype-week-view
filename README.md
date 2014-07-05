@@ -2,6 +2,8 @@
 
 this is just a prototype, coded really fast to test performance and viability.
 
+http://millermedeiros.github.io/prototype-week-view/
+
 the main goal for the prototype is to test the drag performance on week view,
 but I also decided to use [Vue.js](http://vuejs.org/) to see how much it would
 simplify the process and if performance is good enough. I ended up using the
