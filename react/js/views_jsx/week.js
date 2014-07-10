@@ -1,7 +1,12 @@
 /** @jsx React.DOM */
-define(function(require, exports) {
+define(function(require) {
   var React = require('react');
+
+  // ---
+
   var WeekAllDay = require('./week_allday');
+  var WeekSidebarHours = require('./week_sidebar');
+  var WeekDays = require('./week_days');
 
   // ----
 
@@ -29,17 +34,19 @@ define(function(require, exports) {
       today.setHours(0, 0, 0, 0);
 
       return {
-        baseDate: today
+        baseDate: today,
+        range: this.getRange(today),
       };
     },
 
 
     getInitialState: function() {
       return {
-        range: this.getRange(),
-        days: []
+        days: [],
+        visibleRange: this.getVisibleRange(this.props.range)
       };
     },
+
 
     componentDidMount: function() {
       this.updateDays();
@@ -92,7 +99,7 @@ define(function(require, exports) {
         return strftime(date, '%b %Y');
       }
 
-      var visibleRange = this.getVisibleRange();
+      var visibleRange = this.state.visibleRange;
       var str = monthYear(visibleRange.startDate);
       if (!isSameMonth(visibleRange.startDate, visibleRange.endDate)) {
         str += ' ' + monthYear(visibleRange.endDate);
@@ -101,8 +108,7 @@ define(function(require, exports) {
     },
 
 
-    getVisibleRange: function() {
-      var range = this.state.range;
+    getVisibleRange: function(range) {
       var diff = this.getScrollDiff();
       var startDate = new Date(range.startDate);
       startDate.setDate(startDate.getDate() + 5 + diff);
@@ -116,6 +122,14 @@ define(function(require, exports) {
       return visibleRange;
     },
 
+
+    updateVisibleRange: function() {
+      var range = this.getVisibleRange(this.props.range);
+      this.setState({
+        visibleRange: range
+      });
+      return range;
+    },
 
     setupPan: function () {
       var element = this.getDOMNode();
@@ -150,6 +164,7 @@ define(function(require, exports) {
       var transform = 'translateX(' + this.props.scrollOffsetX +'px)';
       this.refs.weekAllDays.getDOMNode().style.transform = transform;
       this.refs.weekDays.getDOMNode().style.transform = transform;
+      this.updateVisibleRange();
     },
 
 
@@ -211,9 +226,7 @@ define(function(require, exports) {
       this.setScrollOffsetX(START_X);
     },
 
-    getRange: function() {
-      var baseDate = this.props.baseDate;
-
+    getRange: function(baseDate) {
       var endDate = new Date(baseDate);
       endDate.setDate(baseDate.getDate() + 9);
       endDate.setHours(0, 0, 0, 0);
@@ -230,13 +243,8 @@ define(function(require, exports) {
     },
 
     updateRange: function () {
-      var range = this.getRange();
-
-      // setState might be async
-      this.setState({
-        range: range
-      });
-
+      var range = this.getRange(this.props.baseDate);
+      this.props.range = range;
       return range;
     }
 
@@ -258,63 +266,7 @@ define(function(require, exports) {
   }
 
 
-  var WeekSidebarHours = React.createClass({
-    render: function() {
-      var hours = [];
-      var i = -1;
-      while(++i < 24) {
-        hours.push(<li data-hour={i} key={i}>{i}</li>);
-      }
-
-      return (
-        <ol className="week-sidebar-hours">
-          {hours}
-        </ol>
-      );
-    }
-  })
-
-
-  var WeekDays = React.createClass({
-    render: function() {
-      var days = this.props.days.map(function(day) {
-        var hours = day.hours.map(function(hour, i) {
-          var events = hour.events.map(function(event) {
-            var style = {
-              height: (event.duration * 3) + 'rem'
-            };
-            return (
-              <li className="week-event" key={event.id} data-id={event.id} style={style}>{event.title}</li>
-            );
-          });
-
-          return (
-            <ol className="week-hour" data-hour={i} key={i}>
-              {events}
-            </ol>
-          );
-        });
-
-        return (
-          <section className="week-day" data-date={day.date} key={day.date}>
-            <section className="week-day-hours">
-              {hours}
-            </section>
-          </section>
-        );
-      });
-
-      return (
-        <section className="week-days">
-          {days}
-        </section>
-      )
-    }
-  });
-
-  exports.init = function() {
-    React.renderComponent(<WeekView />, document.body);
-  };
+  return WeekView;
 
 });
 

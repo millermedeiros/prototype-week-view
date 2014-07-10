@@ -9,7 +9,9 @@ define(function(require) {
 
   // ----
 
-  var weekView = require('./views/week');
-  weekView.init();
+  var React = require('react');
+  var WeekView = require('./views/week');
+
+  React.renderComponent(WeekView(), document.body);
 
 });
