@@ -15,5 +15,8 @@
     "predef": [
       "define"
     ]
+  },
+  "devDependencies": {
+    "requirejs": "^2.1.14"
   }
 }

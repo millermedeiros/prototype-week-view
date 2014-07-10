@@ -1,4 +1,7 @@
 {
+  "name": "week-view-prototype",
+  "version": "0.0.1",
+  "private": true,
   "volo": {
     "baseUrl": "js",
     "dependencies": {
@@ -6,7 +9,8 @@
       "mout": "github:mout/mout/v0.9.1#src",
       "react": "github:reactjs/react-bower/v0.10.0#react.js",
       "seedrandom": "github:davidbau/seedrandom/2.3.6#seedrandom.js",
-      "signals": "github:millermedeiros/js-signals/v1.0.0#dist/signals.js"
+      "signals": "github:millermedeiros/js-signals/v1.0.0#dist/signals.js",
+      "almond": "github:jrburke/almond/0.2.9"
     }
   },
   "jshintConfig": {
@@ -17,5 +21,8 @@
     "predef": [
       "define"
     ]
+  },
+  "devDependencies": {
+    "requirejs": "^2.1.14"
   }
 }

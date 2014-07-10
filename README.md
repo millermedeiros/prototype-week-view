@@ -2,12 +2,13 @@
 
 this is just a prototype, coded really fast to test performance and viability.
 
-http://millermedeiros.github.io/prototype-week-view/
+Live preview: http://millermedeiros.github.io/prototype-week-view/
 
 the main goal for the prototype is to test the drag performance on week view,
-but I also decided to use [Vue.js](http://vuejs.org/) to see how much it would
-simplify the process and if performance is good enough. I ended up using the
-live binding to do some *bad things*, but it was a good stress test as well.
+but I also decided to test [Vue.js](http://vuejs.org/) and
+[React.js](http://facebook.github.io/react/) to see how much it would simplify
+the process and if performance is good enough. I ended up using the live
+bindingwto do some *bad things*, but it was a good stress test as well.
 
 I tried many different markup structures, some of them caused weird glitches
 and *checker boarding*, maybe I'll push other branches for you guys to try out.

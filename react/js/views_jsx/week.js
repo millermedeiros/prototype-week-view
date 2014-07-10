@@ -123,24 +123,24 @@ define(function(require, exports) {
 
       gd.startDetecting();
 
-      element.addEventListener('pan', (evt) => {
+      var self = this;
+
+      element.addEventListener('pan', function(evt) {
         var detail = evt.detail;
         var absX = Math.abs(detail.absolute.dx);
         var absY = Math.abs(detail.absolute.dy);
 
         if (absY > 30 || absX < absY) return;
 
-        if (absX > 10) {
-          evt.preventDefault();
-          evt.stopPropagation();
-        }
+        evt.preventDefault();
+        evt.stopPropagation();
 
-        this.setScrollOffsetX(this.props.scrollOffsetX + detail.relative.dx);
+        self.setScrollOffsetX(self.props.scrollOffsetX + detail.relative.dx);
       });
 
-      element.addEventListener('swipe', () => {
-        this.setScrollOffsetX(round(this.props.scrollOffsetX, CELL_WIDTH));
-        this.updateBaseDateAfterScroll();
+      element.addEventListener('swipe', function() {
+        self.setScrollOffsetX(round(self.props.scrollOffsetX, CELL_WIDTH));
+        self.updateBaseDateAfterScroll();
       });
     },
 
