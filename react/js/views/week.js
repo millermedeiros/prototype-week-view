@@ -42,8 +42,8 @@ define(function(require) {
 
     getInitialState: function() {
       return {
-        days: [],
-        visibleRange: this.getVisibleRange(this.props.range)
+        days: []//,
+        // visibleRange: this.getVisibleRange(this.props.range)
       };
     },
 
@@ -99,7 +99,8 @@ define(function(require) {
         return strftime(date, '%b %Y');
       }
 
-      var visibleRange = this.state.visibleRange;
+      var visibleRange = this.getVisibleRange(this.props.range);
+      // var visibleRange = this.state.visibleRange;
       var str = monthYear(visibleRange.startDate);
       if (!isSameMonth(visibleRange.startDate, visibleRange.endDate)) {
         str += ' ' + monthYear(visibleRange.endDate);
@@ -123,13 +124,13 @@ define(function(require) {
     },
 
 
-    updateVisibleRange: function() {
-      var range = this.getVisibleRange(this.props.range);
-      this.setState({
-        visibleRange: range
-      });
-      return range;
-    },
+    // updateVisibleRange: function() {
+      // var range = this.getVisibleRange(this.props.range);
+      // this.setState({
+        // visibleRange: range
+      // });
+      // return range;
+    // },
 
     setupPan: function () {
       var element = this.getDOMNode();
@@ -164,7 +165,7 @@ define(function(require) {
       var transform = 'translateX(' + this.props.scrollOffsetX +'px)';
       this.refs.weekAllDays.getDOMNode().style.transform = transform;
       this.refs.weekDays.getDOMNode().style.transform = transform;
-      this.updateVisibleRange();
+      // this.updateVisibleRange();
     },
 
 
