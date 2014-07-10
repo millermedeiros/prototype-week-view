@@ -1,0 +1,164 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+ol {
+  list-style: none;
+}
+
+html {
+  font-size: 10px;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+
+#time-header {
+  background-color: #F97C17;
+  color: #fff;
+  height: 5rem;
+  text-align: center;
+  line-height: 5rem;
+  position: absolute;
+  top: 0;
+  z-index: 999;
+  width: 100%;
+}
+
+
+#time-header button {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#week-view {
+  background-color: #fff;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: calc(100% - 5rem);
+  top: 5rem;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.week-sidebar-allday {
+  position: fixed;
+  width: 3rem;
+  background: #eee;
+  top: 5rem;
+  height: 5rem;
+  z-index: 55;
+  padding: 0.5rem;
+}
+
+.week-sidebar-hours {
+  padding-top: 5rem;
+  width: 3rem;
+  background-color: #eee;
+  z-index: 50;
+  /* solves z-index */
+  transform: translateX(0);
+}
+
+.week-sidebar-hours li {
+  padding: 0.5rem;
+  height: 3rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.week-main {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  z-index: 1;
+}
+
+
+.week-days-wrapper {
+  width: 100%;
+}
+
+.week-alldays-wrapper {
+  position: fixed;
+  top: 5rem;
+  left: 3rem;
+  z-index: 50;
+  height: 5rem;
+  background-color: #eee;
+}
+
+.week-alldays {
+  height: 5rem;
+  width: 87rem;
+}
+
+.week-allday {
+  width: 5.8rem;
+  float: left;
+  border-right: 0.1rem solid #bbb;
+}
+
+.week-allday-events {
+  height: 3.5rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: #eee;
+}
+
+.week-allday-date {
+  border-bottom: 1px solid #aaa;
+  height: 1.5rem;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.5rem;
+}
+
+.week-days {
+  background-color: #fff;
+  position: absolute;
+  overflow: hidden;
+  left: 3rem;
+  top: 5rem;
+  width: 87rem;
+}
+
+.week-day {
+  width: 5.8rem;
+  float: left;
+  border-right: 0.1rem solid #ddd;
+}
+
+.week-hour {
+  height: 3rem;
+  border-bottom: 0.1rem solid #ddd;
+}
+
+
+.week-event,
+.week-allday-event {
+  font-size: 1.3rem;
+  padding: 0.5rem;
+  background-color: rgba(0, 255, 230, 0.2);
+  word-wrap: break-word;
+  overflow: hidden;
+}
+
+
+.disable-touch {
+  pointer-events: none;
+}
+

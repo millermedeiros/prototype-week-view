@@ -1,0 +1,21 @@
+{
+  "volo": {
+    "baseUrl": "js",
+    "dependencies": {
+      "alameda": "github:requirejs/alameda/0.2.0",
+      "mout": "github:mout/mout/v0.9.1#src",
+      "react": "github:reactjs/react-bower/v0.10.0#react.js",
+      "seedrandom": "github:davidbau/seedrandom/2.3.6#seedrandom.js",
+      "signals": "github:millermedeiros/js-signals/v1.0.0#dist/signals.js"
+    }
+  },
+  "jshintConfig": {
+    "eqnull": true,
+    "undef": true,
+    "unused": true,
+    "browser": true,
+    "predef": [
+      "define"
+    ]
+  }
+}
