@@ -7,6 +7,12 @@ rjs.optimize({
   name: 'almond',
   out: 'js/built.js',
   include: ['app'],
-  insertRequire: ['app']
+  insertRequire: ['app'],
+  paths: {
+    // toggle react version here (min is faster) fake-react doesn't do anything
+    // was used just to test how much react slows down the startup
+    // react: 'fake-react'
+    react: 'react-min'
+  }
 });
 
