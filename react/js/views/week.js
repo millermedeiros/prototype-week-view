@@ -11,6 +11,7 @@ define(function(require) {
   // ----
 
   var remove = require('mout/array/remove');
+  var unique = require('mout/array/unique');
   var clamp = require('mout/math/clamp');
   var isSame = require('mout/date/isSame');
   var round = require('mout/math/round');
@@ -42,8 +43,7 @@ define(function(require) {
 
     getInitialState: function() {
       return {
-        days: []//,
-        // visibleRange: this.getVisibleRange(this.props.range)
+        days: []
       };
     },
 
@@ -66,10 +66,10 @@ define(function(require) {
           React.DOM.div( {className:"week-sidebar-allday icon-allday"}, "All day"),
 
           React.DOM.div( {className:"week-alldays-wrapper"}, 
-            WeekAllDay( {days:this.state.days, ref:"weekAllDays"} )
+            WeekAllDay( {days:this.state.days, ref:"weekAllDay"} )
           ),
 
-          React.DOM.div( {className:"week-main"}, 
+          React.DOM.div( {className:"week-main", ref:"weekMain"}, 
             React.DOM.div( {className:"week-days-wrapper"}, 
               WeekSidebarHours(null ),
               WeekDays( {days:this.state.days, ref:"weekDays"} )
@@ -99,8 +99,7 @@ define(function(require) {
         return strftime(date, '%b %Y');
       }
 
-      var visibleRange = this.getVisibleRange(this.props.range);
-      // var visibleRange = this.state.visibleRange;
+      var visibleRange = this.getVisibleRange();
       var str = monthYear(visibleRange.startDate);
       if (!isSameMonth(visibleRange.startDate, visibleRange.endDate)) {
         str += ' ' + monthYear(visibleRange.endDate);
@@ -109,7 +108,8 @@ define(function(require) {
     },
 
 
-    getVisibleRange: function(range) {
+    getVisibleRange: function() {
+      var range = this.props.range;
       var diff = this.getScrollDiff();
       var startDate = new Date(range.startDate);
       startDate.setDate(startDate.getDate() + 5 + diff);
@@ -124,14 +124,6 @@ define(function(require) {
     },
 
 
-    // updateVisibleRange: function() {
-      // var range = this.getVisibleRange(this.props.range);
-      // this.setState({
-        // visibleRange: range
-      // });
-      // return range;
-    // },
-
     setupPan: function () {
       var element = this.getDOMNode();
       var gd = new GestureDetector(element);
@@ -139,16 +131,27 @@ define(function(require) {
       gd.startDetecting();
 
       var self = this;
+      var isVertical;
+      var isHorizontal;
 
       element.addEventListener('pan', function(evt) {
+        if (isVertical) return;
         var detail = evt.detail;
-        var absX = Math.abs(detail.absolute.dx);
-        var absY = Math.abs(detail.absolute.dy);
 
-        if (absY > 30 || absX < absY) return;
+        // this complex logic is to make sure this block is only executed once
+        if (!isVertical && !isHorizontal) {
+          isVertical = Math.abs(detail.absolute.dx) < Math.abs(detail.absolute.dy);
+          isHorizontal = !isVertical;
 
-        evt.preventDefault();
-        evt.stopPropagation();
+          if (isVertical) return;
+
+          // XXX: I believe there is an issue with APZ and
+          // toggling the overflowY while the scrollbar is disappearing, so for
+          // now we can't really avoid the vertical scroll..
+          // self.refs.weekMain.getDOMNode().style.overflowY = 'hidden';
+          evt.stopPropagation();
+          evt.preventDefault();
+        }
 
         self.setScrollOffsetX(self.props.scrollOffsetX + detail.relative.dx);
       });
@@ -156,6 +159,16 @@ define(function(require) {
       element.addEventListener('swipe', function() {
         self.setScrollOffsetX(round(self.props.scrollOffsetX, CELL_WIDTH));
         self.updateBaseDateAfterScroll();
+
+        // XXX: I believe there is an issue with APZ and
+        // toggling the overflowY while the scrollbar is disappearing, so for
+        // now we can't really avoid the vertical scroll..
+        // if (isHorizontal) {
+          // self.refs.weekMain.getDOMNode().style.overflowY = 'scroll';
+        // }
+
+        isVertical = false;
+        isHorizontal = false;
       });
     },
 
@@ -163,9 +176,8 @@ define(function(require) {
     setScrollOffsetX: function(value) {
       this.props.scrollOffsetX = clamp(value, MIN_X, 0);
       var transform = 'translateX(' + this.props.scrollOffsetX +'px)';
-      this.refs.weekAllDays.getDOMNode().style.transform = transform;
+      this.refs.weekAllDay.getDOMNode().style.transform = transform;
       this.refs.weekDays.getDOMNode().style.transform = transform;
-      // this.updateVisibleRange();
     },
 
 
@@ -212,11 +224,16 @@ define(function(require) {
         date.setDate(date.getDate() + offset + i);
         date.setHours(0, 0, 0, 0);
         var day = eventModel.getDay(date);
-        if (rangeBase === range.endDate) {
-          days.push(day);
-        } else {
-          days.splice(i, 0, day);
-        }
+        days.push(day);
+      });
+
+      // FIXME: the logic of this method is wrong (probably the way I create
+      // the dates is wrong) so we need to remove duplicates and sort the dates
+      days = unique(days, function(a, b) {
+        return Number(a.date) === Number(b.date);
+      }).sort(function(a, b) {
+        // using sort since it's simpler than splice (even tho it's slower)
+        return Number(a.date) - Number(b.date);
       });
 
       this.setState({
